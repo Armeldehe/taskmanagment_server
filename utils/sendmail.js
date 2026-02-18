@@ -4,23 +4,23 @@ const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
 
-// const transport = nodemailer.createTransport(
-//   mj({
-//     auth: {
-//       apiKey: "33f7539bfb4f6a582f667c909f948c22",
-//       apiSecret: "67a30021dab44aee596f8f862539cec3",
-//     },
-//   }),
-// );
-
 const transport = nodemailer.createTransport(
-  {port: 1025, 
-   auth:{
-        user: "user",
-        pass: "password"
-   } 
-  }
+  mj({
+    auth: {
+      apiKey: "33f7539bfb4f6a582f667c909f948c22",
+      apiSecret: "67a30021dab44aee596f8f862539cec3",
+    },
+  }),
 );
+
+// const transport = nodemailer.createTransport(
+//   {port: 1025, 
+//    auth:{
+//         user: "user",
+//         pass: "password"
+//    } 
+//   }
+// );
 
 const sendmail = async (email, subject, payload, template) => {
   const source = fs.readFileSync(path.join(__dirname, template), "utf8");
