@@ -30,4 +30,10 @@ const logout = (request, response) => {
     .json({message: 'vous êtes déconnectés', data: {accessToken, refreshToken} });
 }
 
-module.exports = {register, login, logout}
+const activation = async (request, response) => {
+    const {token, userId } = await request.body
+    const result = await security_service.Activation({token, userId });
+    return response.json(result)
+}
+
+module.exports = {register, login, logout, activation}

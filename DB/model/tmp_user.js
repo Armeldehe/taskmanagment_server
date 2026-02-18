@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const crypter_password = require('../../utils/hash_password')
+const genToken = require('../../utils/gentoken')
 
-const userShema = new mongoose.Schema({
+const tmpUserShema = new mongoose.Schema({
     name :{
         type: String,
         required: true, 
@@ -32,14 +33,26 @@ const userShema = new mongoose.Schema({
     },
     avatar:{
         type: String,
+    },
+    token : {
+        type: String,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+        expires: '600s'
     }
 
 })
 
-// userShema.pre("save", async function() {
-//     if(this.isNew){
-//         this.password = await crypter_password(this.password)
-//     }
-// })
-const User = mongoose.model('User', userShema)
-module.exports = User
+tmpUserShema.pre("save", async function() {
+    if(this.isNew){
+        this.password = await crypter_password(this.password)
+        this.token = await genToken()
+    }
+})
+
+
+
+const tmpUser = mongoose.model('tmpUser', tmpUserShema)
+module.exports = tmpUser 

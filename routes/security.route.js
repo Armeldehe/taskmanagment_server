@@ -5,6 +5,7 @@ const securityController = require('../controler/security_controller')
 /* GET home page. */
 
 securityRouter.post('/register', securityController.register);
+securityRouter.post('/activation', securityController.activation);
 securityRouter.post('/login', securityController.login);
 securityRouter.post('/logout', securityController.logout);
 

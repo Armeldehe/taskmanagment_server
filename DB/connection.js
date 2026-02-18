@@ -1,17 +1,35 @@
 const mongoose = require("mongoose");
-// const {Task,User} = require("./model")
-
 
 const url = process.env.DB_URL;
-const connectDb = () => {
+
+const connectDb = async () => {
   try {
-    mongoose.connect(url, { serverSelectionTimeoutMS: 5000 });
-    console.log("database connecté avec succes");
+    if (!url) {
+      throw new Error("La variable d'environnement DB_URL n'est pas définie.");
+    }
+    
+    await mongoose.connect(url, { 
+      serverSelectionTimeoutMS: 5000 
+    });
+    
+    console.log("Base de données connectée avec succès");
 
   } catch (error) {
-    console.error(error.message);
+    console.error("Erreur de connexion à la base de données :", error.message);
     process.exit(1);
   }
 };
 
-module.exports = connectDb();
+// Gestion des événements de connexion
+mongoose.connection.on('disconnected', () => {
+  console.log("Base de données déconnectée");
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error("Erreur Mongoose :", err);
+});
+
+// Exécution de la connexion
+connectDb();
+
+module.exports = mongoose.connection;
